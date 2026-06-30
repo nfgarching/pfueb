@@ -1,0 +1,23 @@
+# ---------------------------------------------------------------------------
+# Persönliche Falldaten
+#
+# Der Ordner data/ enthält Mandantendaten (Titel, Falldaten-XML, generierte
+# Fallskripte, fertige PfÜB-PDFs). Diese werden NICHT veröffentlicht.
+# Die Verzeichnisstruktur selbst bleibt erhalten (über .gitkeep-Dateien),
+# damit der Workflow nach dem Klonen sofort die erwarteten Ordner vorfindet.
+# ---------------------------------------------------------------------------
+/data/**
+!/data/
+!/data/**/
+!/data/**/.gitkeep
+
+# Lokale Claude-Code-Einstellungen (maschinen-/nutzerspezifisch)
+.claude/settings.local.json
+
+# Python
+__pycache__/
+*.py[cod]
+
+# Editor / OS
+.DS_Store
+*.swp

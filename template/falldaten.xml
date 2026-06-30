@@ -1,0 +1,167 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+  VORLAGE für die Falldaten eines Pfändungs- und Überweisungsbeschlusses
+  (Kontopfändung). Platzhalter in [ ... ] ersetzen.
+
+  Regeln:
+  - Beträge deutsch ohne Währungszeichen: 1.234,56
+  - Datum: TT.MM.JJJJ
+  - Wahrheitswerte: true / false
+  - Leere oder weggelassene Elemente werden im Formular NICHT gefüllt.
+  - typ:    unternehmen | herr | frau   (für "Angaben zu ...")
+  - anrede: herr | frau                 (für gesetzliche Vertreter)
+
+  Generierung des Fallskripts:
+      python3 script/xml_zu_fall.py <diese-datei>.xml
+      -> erzeugt data/fall_<aktenzeichen>_<kurzname>.py
+  Danach Fallskript ausführen -> data/Outbox/PfÜB_<kurzname>.pdf
+
+  Hinweise zur Forderungs-/Kostenaufstellung:
+  - hauptforderung / mahnverfahrenskosten / vorgerichtliche_kosten entsprechen
+    den Blöcken I. und III. des Formulars; jeweils optional laufende_zinsen
+    (offene, noch nicht ausgerechnete Zinsen ab einem Datum).
+  - zwangsvollstreckungskosten = Abschnitt IV (§ 788 ZPO), Kosten DIESES PfÜB:
+      GKG KV 2111 (Festgebühr, derzeit 22,00)
+      VV 3309 = 0,3-Gebühr aus dem Gegenstandswert (1,0-Gebühr nach § 13 RVG)
+      VV 7002 = 20 % der Gebühr, höchstens 20,00
+      USt (VV 7008) = 19 % auf RA-Kosten – NUR wenn Gläubiger NICHT
+                      vorsteuerabzugsberechtigt; sonst leer lassen
+      zwischensumme_ra = VV 3309 + VV 7002 (+ USt, falls vorhanden)
+      summe_i_bis_iv  = Summe I.–IV. (laufende Zinsen bleiben außer Ansatz)
+-->
+<pfueb>
+
+  <!-- Aktenzeichen + Kurzname bestimmen den Dateinamen fall_<az>_<kurz>.py
+       und data/Outbox/PfÜB_<kurz>.pdf -->
+  <fall aktenzeichen="[AZ z.B. 06629]" kurzname="[Kurzname z.B. R-R-Immobilien]"/>
+
+  <antrag>
+    <ort>[Ort des Bevollmächtigten]</ort>
+    <datum>[TT.MM.JJJJ]</datum>
+    <ausfertigung>true</ausfertigung>
+    <zustellung_durch_geschaeftsstelle>true</zustellung_durch_geschaeftsstelle>
+    <drittschuldnererklaerung_840>true</drittschuldnererklaerung_840>
+    <ueberweisung_zur_einziehung>true</ueberweisung_zur_einziehung>
+  </antrag>
+
+  <gericht>
+    <name>[Amtsgericht, z.B. Erding]</name>
+    <strasse>[Straße Hausnr. des Gerichts, optional]</strasse>
+    <plz_ort>[PLZ Ort des Gerichts, optional]</plz_ort>
+  </gericht>
+
+  <glaeubiger ziffer="1">
+    <typ>unternehmen</typ>
+    <name>[Name/Firma]</name>
+    <vorname></vorname>
+    <strasse>[Straße]</strasse>
+    <hausnummer>[Nr.]</hausnummer>
+    <plz>[PLZ]</plz>
+    <ort>[Ort]</ort>
+    <vorsteuerabzugsberechtigt>true</vorsteuerabzugsberechtigt>
+    <gesetzlicher_vertreter>
+      <anrede>herr</anrede>
+      <name>[Nachname GF]</name>
+      <vorname>[Vorname GF]</vorname>
+      <strasse>[Straße]</strasse>
+      <hausnummer>[Nr.]</hausnummer>
+      <plz>[PLZ]</plz>
+      <ort>[Ort]</ort>
+    </gesetzlicher_vertreter>
+  </glaeubiger>
+
+  <bevollmaechtigter bezeichnung="Rechtsanwalt">
+    <anrede>herr</anrede>
+    <name>[Nachname]</name>
+    <vorname>[Vorname]</vorname>
+    <strasse>[Straße]</strasse>
+    <hausnummer>[Nr.]</hausnummer>
+    <plz>[PLZ]</plz>
+    <ort>[Ort]</ort>
+    <geschaeftszeichen>[z.B. 25/6629]</geschaeftszeichen>
+    <telefon>[Telefon]</telefon>
+    <bankverbindung>
+      <kontoinhaber>[Kontoinhaber]</kontoinhaber>
+      <iban>[IBAN]</iban>
+      <verwendungszweck>[z.B. Aktenzeichen]</verwendungszweck>
+    </bankverbindung>
+  </bevollmaechtigter>
+
+  <schuldner ziffer="1">
+    <typ>unternehmen</typ>
+    <name>[Name/Firma]</name>
+    <vorname></vorname>
+    <strasse>[Straße]</strasse>
+    <hausnummer>[Nr.]</hausnummer>
+    <plz>[PLZ]</plz>
+    <ort>[Ort]</ort>
+    <gesetzlicher_vertreter>
+      <anrede>herr</anrede>
+      <name>[Nachname GF]</name>
+      <vorname>[Vorname GF]</vorname>
+      <strasse>[Straße]</strasse>
+      <hausnummer>[Nr.]</hausnummer>
+      <plz>[PLZ]</plz>
+      <ort>[Ort]</ort>
+    </gesetzlicher_vertreter>
+  </schuldner>
+
+  <vollstreckungstitel ziffer="1">
+    <art>Vollstreckungsbescheid</art>
+    <aussteller>[ausstellendes Gericht/Behörde]</aussteller>
+    <datum>[TT.MM.JJJJ]</datum>
+    <geschaeftszeichen>[Geschäftsnummer]</geschaeftszeichen>
+  </vollstreckungstitel>
+
+  <drittschuldner ziffer="1">
+    <typ>unternehmen</typ>
+    <name>[Name der Bank]</name>
+    <strasse>[Straße]</strasse>
+    <hausnummer>[Nr.]</hausnummer>
+    <plz>[PLZ]</plz>
+    <ort>[Ort]</ort>
+    <modul>H</modul>
+    <schuldner_ziffer>1</schuldner_ziffer>
+    <!-- Konkretes Schuldnerkonto (optional, Klarstellung in Modul H) -->
+    <schuldner_konto_iban>[IBAN des Schuldnerkontos]</schuldner_konto_iban>
+  </drittschuldner>
+
+  <forderung>
+    <hauptforderung>
+      <betrag>[Betrag]</betrag>
+      <zinsen_ausgerechnet>[bereits ausgerechnete Zinsen, optional]</zinsen_ausgerechnet>
+      <laufende_zinsen>
+        <prozentpunkte>[z.B. 9]</prozentpunkte>
+        <aus>[Betrag, aus dem verzinst wird]</aus>
+        <ab>[TT.MM.JJJJ]</ab>
+      </laufende_zinsen>
+    </hauptforderung>
+    <mahnverfahrenskosten>
+      <betrag>[Betrag]</betrag>
+      <laufende_zinsen>
+        <prozentpunkte>[z.B. 5]</prozentpunkte>
+        <aus>[Betrag]</aus>
+        <ab>[TT.MM.JJJJ]</ab>
+      </laufende_zinsen>
+    </mahnverfahrenskosten>
+    <vorgerichtliche_kosten>
+      <betrag>[Betrag]</betrag>
+      <laufende_zinsen>
+        <prozentpunkte>[z.B. 9]</prozentpunkte>
+        <aus>[Betrag]</aus>
+        <ab>[TT.MM.JJJJ]</ab>
+      </laufende_zinsen>
+    </vorgerichtliche_kosten>
+  </forderung>
+
+  <zwangsvollstreckungskosten>
+    <gkg_kv2111>22,00</gkg_kv2111>
+    <gegenstandswert>[i.d.R. Summe der titulierten Forderung]</gegenstandswert>
+    <vv3309>[0,3-Gebühr]</vv3309>
+    <vv7002>[Pauschale, max. 20,00]</vv7002>
+    <umsatzsteuer_vv7008></umsatzsteuer_vv7008>
+    <zwischensumme_ra>[VV3309 + VV7002 (+USt)]</zwischensumme_ra>
+    <summe_i_bis_iv>[Summe I.–IV.]</summe_i_bis_iv>
+  </zwangsvollstreckungskosten>
+
+</pfueb>
