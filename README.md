@@ -54,7 +54,7 @@ auf Seite 5 benötigt.
 ## Workflow
 
 ```bash
-# 1) Falldaten-Vorlage kopieren und befüllen
+# 1) Falldaten-Vorlage kopieren und - ggf. mit KI die falldaten.xml z.B. aus Vollstreckungsbescheid - befüllen. Drittschuldner nicht vergessen!)
 cp template/falldaten.xml data/fall_<AZ>_<Kurzname>.xml
 #    z. B. data/fall_06629_R-R-Immobilien.xml  – Platzhalter [ ... ] ersetzen
 
